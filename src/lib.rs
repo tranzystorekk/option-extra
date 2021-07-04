@@ -26,6 +26,18 @@ pub trait OptionExt<T> {
     fn zip_lazy<U, F>(self, f: F) -> Option<(T, U)>
     where
         F: FnOnce() -> Option<U>;
+
+    /// Checks if the wrapped value satisfies the given predicate,
+    /// or returns `false` if `self` is [`None`].
+    /// 
+    /// ```
+    /// use option_extra::OptionExt;
+    /// 
+    /// assert!(Some(1).satisfies(|&n| n % 2 == 1));
+    /// ```
+    fn satisfies<P>(&self, pred: P) -> bool
+    where
+        P: FnOnce(&T) -> bool;
 }
 
 impl<T> OptionExt<T> for Option<T> {
@@ -37,5 +49,15 @@ impl<T> OptionExt<T> for Option<T> {
         let b = f()?;
 
         Some((a, b))
+    }
+
+    fn satisfies<P>(&self, predicate: P) -> bool
+    where
+        P: FnOnce(&T) -> bool,
+    {
+        match self {
+            Some(x) => predicate(x),
+            None => false,
+        }
     }
 }
