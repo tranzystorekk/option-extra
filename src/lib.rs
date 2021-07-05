@@ -29,10 +29,10 @@ pub trait OptionExt<T> {
 
     /// Checks if the wrapped value satisfies the given predicate,
     /// or returns `false` if `self` is [`None`].
-    /// 
+    ///
     /// ```
     /// use option_extra::OptionExt;
-    /// 
+    ///
     /// assert!(Some(1).satisfies(|&n| n % 2 == 1));
     /// ```
     fn satisfies<P>(&self, pred: P) -> bool
