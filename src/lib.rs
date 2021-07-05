@@ -38,6 +38,49 @@ pub trait OptionExt<T> {
     fn satisfies<P>(&self, pred: P) -> bool
     where
         P: FnOnce(&T) -> bool;
+
+    /// Ensure that `self` is [`None`] or panic otherwise.
+    ///
+    /// # Panics
+    ///
+    /// Panics if self is [`Some`].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use option_extra::OptionExt;
+    ///
+    /// None::<()>.unwrap_none();
+    /// ```
+    ///
+    /// ```should_panic
+    /// use option_extra::OptionExt;
+    ///
+    /// Some("abc").unwrap_none(); // fails
+    /// ```
+    fn unwrap_none(self);
+
+    /// Ensure that `self` is [`None`] or panic otherwise,
+    /// with a custom message.
+    ///
+    /// # Panics
+    ///
+    /// Panics with a custom message if `self` is [`Some`].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use option_extra::OptionExt;
+    ///
+    /// None::<()>.expect_none("expected nothing");
+    /// ```
+    ///
+    /// ```should_panic
+    /// use option_extra::OptionExt;
+    ///
+    /// Some("something").expect_none("expected nothing"); // fails with "expected nothing"
+    /// ```
+    fn expect_none(self, msg: &str);
 }
 
 impl<T> OptionExt<T> for Option<T> {
@@ -58,6 +101,18 @@ impl<T> OptionExt<T> for Option<T> {
         match self {
             Some(x) => predicate(x),
             None => false,
+        }
+    }
+
+    fn unwrap_none(self) {
+        if self.is_some() {
+            panic!("called `OptionExt::unwrap_none` on a `Some` value");
+        }
+    }
+
+    fn expect_none(self, msg: &str) {
+        if self.is_some() {
+            panic!("{}", msg);
         }
     }
 }
