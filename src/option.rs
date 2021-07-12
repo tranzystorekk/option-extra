@@ -27,7 +27,7 @@ pub trait OptionExt<T> {
     ///
     /// assert!(Some(1).satisfies(|&n| n % 2 == 1));
     /// ```
-    fn satisfies<P>(&self, pred: P) -> bool
+    fn satisfies<P>(&self, predicate: P) -> bool
     where
         P: FnOnce(&T) -> bool;
 
