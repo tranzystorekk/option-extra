@@ -6,6 +6,7 @@
 //! use option_extra::OptionExt;
 //! use option_extra::ResultExt;
 //! ```
+mod macros;
 mod option;
 mod result;
 
