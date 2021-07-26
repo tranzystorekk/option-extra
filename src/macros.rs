@@ -2,6 +2,20 @@
 ///
 /// Makes a [`Some`] from a selected variant of your enum.
 ///
+/// Currently, until compile-time reflection becomes a thing,
+/// you need to specify bindings when there are multiple fields in your variant:
+///
+/// ```ignore
+/// enum MyEnum {
+///     One(i32),
+///     Many(i32, i32, i32)
+/// }
+///
+/// some!(if let MyEnum::One = <expr>);
+/// some!(if let MyEnum::Many = <expr>); // fails
+/// some!(if let MyEnum::Many { a, b, c } = <expr>);
+/// ```
+///
 /// # Examples
 ///
 /// Short version for one-element variants:
