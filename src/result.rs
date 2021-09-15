@@ -3,6 +3,8 @@ pub trait ResultExt<T, E> {
     /// If `self` is [`Ok`], checks if the wrapped value satisfies the given predicate.
     /// Otherwise, returns `false`.
     ///
+    /// Roughly equivalent to `matches!(&my_result, Ok(x) if predicate(x))`.
+    ///
     /// # Examples
     ///
     /// ```

@@ -22,6 +22,8 @@ pub trait OptionExt<T> {
     /// Checks if the wrapped value satisfies the given predicate,
     /// or returns `false` if `self` is [`None`].
     ///
+    /// Roughly equivalent to `matches!(&my_option, Some(x) if predicate(x))`.
+    ///
     /// ```
     /// use option_extra::OptionExt;
     ///
