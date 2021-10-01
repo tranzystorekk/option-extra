@@ -89,6 +89,23 @@
 ///
 /// assert_eq!(some!(if let MyEnum::Struct {id:, name:} = s), Some((20, "abcd")));
 /// ```
+///
+/// You can also add guards to further constrain which wrapped values are allowed:
+///
+/// ```
+/// use option_extra::some;
+///
+/// enum MyEnum {
+///     Val(i32),
+///     Name(String),
+/// }
+///
+/// let v = MyEnum::Val(10);
+/// let v_odd = MyEnum::Val(15);
+///
+/// assert_eq!(some!(if let MyEnum::Val {x} = v, when x % 2 == 0), Some(10));
+/// assert_eq!(some!(if let MyEnum::Val {x} = v_odd, when x % 2 == 0), None);
+/// ```
 #[macro_export]
 macro_rules! some {
     (if let $p:path = $x:expr) => {
@@ -98,16 +115,16 @@ macro_rules! some {
         }
     };
 
-    (if let $p:path {$($n:ident),+} = $x:expr) => {
+    (if let $p:path {$($n:ident),+} = $x:expr $(, when $guard:expr)?) => {
         match $x {
-            $p($($n),+) => ::std::option::Option::Some(($($n),+)),
+            $p($($n),+) $(if $guard)? => ::std::option::Option::Some(($($n),+)),
             _ => ::std::option::Option::None,
         }
     };
 
-    (if let $p:path {$($n:ident:),+} = $x:expr) => {
+    (if let $p:path {$($n:ident:),+} = $x:expr $(, when $guard:expr)?) => {
         match $x {
-            $p{$($n),+} => ::std::option::Option::Some(($($n),+)),
+            $p{$($n),+} $(if $guard)? => ::std::option::Option::Some(($($n),+)),
             _ => ::std::option::Option::None,
         }
     };
