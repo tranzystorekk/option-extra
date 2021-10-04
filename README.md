@@ -21,3 +21,8 @@ use option_extra::ResultExt;
 
 assert!(Ok::<_, ()>(1).satisfies(|&n| n % 2 == 1));
 ```
+
+## Contributing
+
+If you want something added to this library, submit a PR or a discussion
+in the [Ideas](https://github.com/tranzystorek-io/option-extra/discussions/categories/ideas) channel!
