@@ -2,6 +2,14 @@
 ///
 /// Makes a [`Some`] from a selected variant of your enum.
 ///
+/// General syntax:
+///
+/// ```man
+/// some!( if let <enum variant> [{ <ident>... }] = <expr> [, when <guard expr>] [=> <then expr>] )
+/// ```
+///
+/// where `<ident>` is `<name> [:]`.
+///
 /// Currently, until compile-time reflection becomes a thing,
 /// you need to specify bindings when there are multiple fields in your variant:
 ///
