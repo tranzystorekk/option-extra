@@ -90,6 +90,23 @@
 /// assert_eq!(some!(if let MyEnum::Struct {id:, name:} = s), Some((20, "abcd")));
 /// ```
 ///
+/// Optionally add an expression to which the wrapped value will be mapped:
+///
+/// ```
+/// use option_extra::some;
+///
+/// enum MyEnum {
+///     Int(i32),
+///     Bool(bool),
+/// }
+///
+/// let v_int = MyEnum::Int(10);
+/// let v_bool = MyEnum::Bool(true);
+///
+/// assert_eq!(some!(if let MyEnum::Int { n } = v_int => (n, n + 1)), Some((10, 11)));
+/// assert_eq!(some!(if let MyEnum::Int { n } = v_bool => (n, n + 1)), None);
+/// ```
+///
 /// You can also add guards to further constrain which wrapped values are allowed:
 ///
 /// ```
@@ -122,9 +139,23 @@ macro_rules! some {
         }
     };
 
+    (if let $p:path {$($n:ident),+} = $x:expr $(, when $guard:expr)? => $then:expr) => {
+        match $x {
+            $p($($n),+) $(if $guard)? => ::std::option::Option::Some($then),
+            _ => ::std::option::Option::None,
+        }
+    };
+
     (if let $p:path {$($n:ident:),+} = $x:expr $(, when $guard:expr)?) => {
         match $x {
             $p{$($n),+} $(if $guard)? => ::std::option::Option::Some(($($n),+)),
+            _ => ::std::option::Option::None,
+        }
+    };
+
+    (if let $p:path {$($n:ident:),+} = $x:expr $(, when $guard:expr)? => $then:expr) => {
+        match $x {
+            $p{$($n),+} $(if $guard)? => ::std::option::Option::Some($then),
             _ => ::std::option::Option::None,
         }
     };
