@@ -135,36 +135,36 @@
 macro_rules! some {
     ( if let $p:path = $x:expr ) => {
         match $x {
-            $p(inner) => ::std::option::Option::Some(inner),
-            _ => ::std::option::Option::None,
+            $p(inner) => ::core::option::Option::Some(inner),
+            _ => ::core::option::Option::None,
         }
     };
 
     ( if let $p:path {$($n:ident),+} = $x:expr $(, when $guard:expr)? ) => {
         match $x {
-            $p($($n),+) $(if $guard)? => ::std::option::Option::Some(($($n),+)),
-            _ => ::std::option::Option::None,
+            $p($($n),+) $(if $guard)? => ::core::option::Option::Some(($($n),+)),
+            _ => ::core::option::Option::None,
         }
     };
 
     ( if let $p:path {$($n:ident),+} = $x:expr $(, when $guard:expr)? => $then:expr ) => {
         match $x {
-            $p($($n),+) $(if $guard)? => ::std::option::Option::Some($then),
-            _ => ::std::option::Option::None,
+            $p($($n),+) $(if $guard)? => ::core::option::Option::Some($then),
+            _ => ::core::option::Option::None,
         }
     };
 
     ( if let $p:path {$($n:ident:),+} = $x:expr $(, when $guard:expr)? ) => {
         match $x {
-            $p{$($n),+} $(if $guard)? => ::std::option::Option::Some(($($n),+)),
-            _ => ::std::option::Option::None,
+            $p{$($n),+} $(if $guard)? => ::core::option::Option::Some(($($n),+)),
+            _ => ::core::option::Option::None,
         }
     };
 
     ( if let $p:path {$($n:ident:),+} = $x:expr $(, when $guard:expr)? => $then:expr ) => {
         match $x {
-            $p{$($n),+} $(if $guard)? => ::std::option::Option::Some($then),
-            _ => ::std::option::Option::None,
+            $p{$($n),+} $(if $guard)? => ::core::option::Option::Some($then),
+            _ => ::core::option::Option::None,
         }
     };
 }
