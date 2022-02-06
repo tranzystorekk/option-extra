@@ -2,7 +2,7 @@
 name = "option-extra"
 version = "0.1.0"
 description = "Additional utilities for Rust's Option type"
-edition = "2018"
+edition = "2021"
 license = "MIT"
 repository = "https://github.com/tranzystorek-io/option-extra"
 keywords = ["library", "utilities"]
