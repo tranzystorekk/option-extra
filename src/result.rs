@@ -15,6 +15,22 @@ pub trait ResultExt<T, E> {
     fn satisfies<P>(&self, predicate: P) -> bool
     where
         P: FnOnce(&T) -> bool;
+
+    /// Mutates the wrapped `Ok` value with the given function
+    /// and returns the resulting `self`.
+    ///
+    /// An `Err` is returned unchanged.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use option_extra::ResultExt;
+    ///
+    /// assert_eq!(Ok::<_, ()>(vec![1, 2, 3]).update(|v| v.push(0)), Ok(vec![1, 2, 3, 0]));
+    /// ```
+    fn update<F>(self, f: F) -> Self
+    where
+        F: FnOnce(&mut T);
 }
 
 impl<T, E> ResultExt<T, E> for Result<T, E> {
@@ -25,6 +41,19 @@ impl<T, E> ResultExt<T, E> for Result<T, E> {
         match self {
             Ok(x) => predicate(x),
             _ => false,
+        }
+    }
+
+    fn update<F>(self, f: F) -> Self
+    where
+        F: FnOnce(&mut T),
+    {
+        match self {
+            Ok(mut x) => {
+                f(&mut x);
+                Ok(x)
+            }
+            err => err,
         }
     }
 }

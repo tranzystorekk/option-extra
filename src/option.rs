@@ -75,6 +75,20 @@ pub trait OptionExt<T> {
     /// Some("something").expect_none("expected nothing"); // fails with "expected nothing"
     /// ```
     fn expect_none(self, msg: &str);
+
+    /// Mutates the wrapped value with the given function
+    /// and returns the resulting `self`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use option_extra::OptionExt;
+    ///
+    /// assert_eq!(Some(vec![1, 2, 3]).update(|v| v.push(0)), Some(vec![1, 2, 3, 0]));
+    /// ```
+    fn update<F>(self, f: F) -> Self
+    where
+        F: FnOnce(&mut T);
 }
 
 impl<T> OptionExt<T> for Option<T> {
@@ -107,6 +121,19 @@ impl<T> OptionExt<T> for Option<T> {
     fn expect_none(self, msg: &str) {
         if self.is_some() {
             panic!("{}", msg);
+        }
+    }
+
+    fn update<F>(self, f: F) -> Self
+    where
+        F: FnOnce(&mut T),
+    {
+        match self {
+            Some(mut x) => {
+                f(&mut x);
+                Some(x)
+            }
+            None => None,
         }
     }
 }
